@@ -1,0 +1,85 @@
+/* ============================================================
+   base.css — Reset global et typographie de base
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.65;
+  font-size: 15px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Titres */
+h1, h2, h3, h4 {
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.9rem; }
+h3 { font-weight: 500; font-size: 1rem; }
+
+/* Paragraphes */
+p { line-height: 1.7; }
+
+/* Liens */
+a {
+  color: var(--color-green-mid);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover { color: var(--color-green); text-decoration: underline; }
+
+/* Images */
+img, svg { display: block; max-width: 100%; }
+
+/* Listes */
+ul, ol { padding-left: 1.4rem; }
+li { margin-bottom: 0.25rem; }
+
+/* Code */
+code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.875em;
+  background: var(--color-bg-muted);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  color: var(--color-terra);
+}
+
+/* Séparateur horizontal */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 2rem 0;
+}
+
+/* Responsive images dans les sections */
+.section img {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+/* Accessibilité : focus visible */
+:focus-visible {
+  outline: 2px solid var(--color-green-mid);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}

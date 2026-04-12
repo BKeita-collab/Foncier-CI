@@ -1,0 +1,295 @@
+/* ============================================================
+   components.css — Composants réutilisables
+   Ajouter un nouveau composant ici pour qu'il soit disponible
+   sur toutes les pages du site.
+   ============================================================ */
+
+/* ── Boîte de loi ── */
+.loi-box {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-green);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.loi-box h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+
+.loi-box p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+/* ── Tags / étiquettes ── */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  padding: 3px 9px;
+  margin-bottom: 8px;
+}
+
+.tag--green   { color: var(--color-green);   background: var(--color-green-light); }
+.tag--amber   { color: var(--color-amber);   background: var(--color-amber-light); }
+.tag--terra   { color: var(--color-terra);   background: var(--color-terra-light); }
+.tag--neutral { color: var(--color-text-muted); background: var(--color-bg-muted); }
+
+/* ── Badges (inline) ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.badge--green  { color: var(--color-green);  background: var(--color-green-light); }
+.badge--amber  { color: var(--color-amber);  background: var(--color-amber-light); }
+.badge--danger { color: var(--color-terra);  background: var(--color-terra-light); }
+
+/* ── Cartes ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.card-grid--single { grid-template-columns: 1fr; }
+.card-grid--two    { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.card__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-bottom: 6px;
+}
+
+.card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* ── Étapes ── */
+.steps { margin-bottom: 1.5rem; }
+
+.step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+
+.step__num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-green-light);
+  border: 1px solid var(--color-green-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-green);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step__body {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.step__body strong {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* ── Tableau ── */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-bg-card);
+  font-size: 13.5px;
+}
+
+thead th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+  background: var(--color-bg-muted);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 12px 16px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: #FAFAF8; }
+
+/* ── Note / avertissement ── */
+.note {
+  font-size: 13px;
+  color: #7A6210;
+  background: var(--color-amber-light);
+  border-left: 3px solid var(--color-amber);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  line-height: 1.75;
+  margin-top: 1rem;
+}
+
+/* ── Boîte mise en valeur (verte) ── */
+.highlight-box {
+  background: var(--color-green-light);
+  border: 1px solid var(--color-green-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.highlight-box h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-green);
+  margin-bottom: 6px;
+}
+
+.highlight-box p {
+  font-size: 13px;
+  color: #2D5A3D;
+  line-height: 1.75;
+}
+
+/* ── Sous-titre de section ── */
+.sub-heading {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* ── Grille deux colonnes ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Stat card (métriques) ── */
+.stat-card {
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  text-align: center;
+}
+
+.stat-card__value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-green);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-card__label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ── Bouton ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  border: none;
+}
+
+.btn--primary {
+  background: var(--color-green);
+  color: #fff;
+}
+.btn--primary:hover { background: var(--color-green-mid); color: #fff; text-decoration: none; }
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-green);
+  border: 1px solid var(--color-green-border);
+}
+.btn--outline:hover {
+  background: var(--color-green-light);
+  text-decoration: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .two-col          { grid-template-columns: 1fr; }
+  .card-grid        { grid-template-columns: 1fr; }
+  .card-grid--two   { grid-template-columns: 1fr; }
+}

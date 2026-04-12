@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphiques des processus — Foncier Ivoirien</title>
+  <meta name="description" content="Schémas visuels des processus fonciers en Côte d'Ivoire : immatriculation, lotissement, certification rurale.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS du projet -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+
+  <!-- Styles spécifiques aux graphiques -->
+  <style>
+    /* Conteneur de diagramme */
+    .diagram-wrap {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .diagram-wrap figcaption {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-top: 1rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Sélecteur de schémas */
+    .schema-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .schema-nav__btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .schema-nav__btn:hover {
+      border-color: var(--color-green-border);
+      color: var(--color-text);
+    }
+
+    .schema-nav__btn.is-active {
+      background: var(--color-green);
+      border-color: var(--color-green);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* Schémas */
+    .schema { display: none; }
+    .schema.is-active { display: block; }
+
+    /* SVG styling */
+    .diagram-wrap svg {
+      font-family: var(--font-body);
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── En-tête ─── -->
+<header class="page-header">
+  <div class="page-header__inner">
+    <a href="../index.html" class="page-header__back">← Retour au guide</a>
+    <h1>Graphiques &amp; schémas</h1>
+    <p>Visualisations des processus fonciers en Côte d'Ivoire</p>
+  </div>
+</header>
+
+<!-- ─── Navigation site ─── -->
+<div class="site-nav">
+  <div class="site-nav__inner">
+    <a href="../index.html">Guide</a>
+    <a href="annuaire.html">Annuaire</a>
+    <a href="graphiques.html" class="is-current">Graphiques</a>
+  </div>
+</div>
+
+<!-- ─── Contenu ─── -->
+<main class="main">
+
+  <!-- Sélecteur de schémas -->
+  <div class="schema-nav" role="tablist" aria-label="Choisir un schéma">
+    <button class="schema-nav__btn is-active" data-schema="immatriculation" role="tab">Immatriculation (TF)</button>
+    <button class="schema-nav__btn" data-schema="lotissement" role="tab">Lotissement</button>
+    <button class="schema-nav__btn" data-schema="rural" role="tab">Certification rurale</button>
+    <button class="schema-nav__btn" data-schema="hierarchie" role="tab">Hiérarchie des titres</button>
+  </div>
+
+  <!-- ═══ SCHÉMA 1 : IMMATRICULATION ═══ -->
+  <div id="schema-immatriculation" class="schema is-active">
+    <p class="sub-heading">Procédure d'immatriculation — Titre Foncier</p>
+    <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:1.25rem">
+      Étapes du processus depuis la demande jusqu'à la délivrance du Titre Foncier par la Conservation Foncière.
+    </p>
+
+    <figure class="diagram-wrap">
+      <svg viewBox="0 0 700 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramme du processus d'immatriculation foncière">
+        <title>Processus d'immatriculation — Titre Foncier</title>
+        <desc>Flux en 5 étapes : dépôt du dossier, bornage, publication, instruction des oppositions, délivrance du titre foncier</desc>
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1C4731" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#9C9690" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Étape 1 -->
+        <rect x="50" y="30" width="200" height="64" rx="8" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="150" y="54" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="13" font-weight="500" fill="#1C4731">1. Dépôt du dossier</text>
+        <text x="150" y="74" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">Conservation Foncière</text>
+
+        <!-- Flèche 1→2 -->
+        <line x1="150" y1="94" x2="150" y2="128" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Étape 2 -->
+        <rect x="50" y="128" width="200" height="64" rx="8" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="150" y="152" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="13" font-weight="500" fill="#1C4731">2. Bornage contradictoire</text>
+        <text x="150" y="172" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">Géomètre expert + riverains</text>
+
+        <!-- Flèche 2→3 -->
+        <line x1="150" y1="192" x2="150" y2="226" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Étape 3 -->
+        <rect x="50" y="226" width="200" height="64" rx="8" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="150" y="250" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="13" font-weight="500" fill="#1C4731">3. Publication JO</text>
+        <text x="150" y="270" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">Délai d'opposition : 2 mois</text>
+
+        <!-- Flèche 3 → décision -->
+        <line x1="150" y1="290" x2="150" y2="324" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Décision : opposition ? -->
+        <polygon points="150,330 260,370 150,410 40,370" fill="#FDF4E0" stroke="#B87B0A" stroke-width="0.5"/>
+        <text x="150" y="365" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">Opposition ?</text>
+
+        <!-- Non : flèche vers étape 5 (droite) -->
+        <line x1="260" y1="370" x2="390" y2="370" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="320" y="362" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">Non</text>
+
+        <!-- Oui : flèche vers instruction (bas) -->
+        <line x1="150" y1="410" x2="150" y2="444" stroke="#9C9690" stroke-width="1" marker-end="url(#arr-gray)"/>
+        <text x="170" y="435" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Oui</text>
+
+        <!-- Étape 4 : instruction opposition -->
+        <rect x="50" y="444" width="200" height="64" rx="8" fill="#F5F0E8" stroke="#DDD8CE" stroke-width="0.5"/>
+        <text x="150" y="468" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#6B6560">4. Instruction opposition</text>
+        <text x="150" y="488" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Commission de règlement</text>
+        <!-- Retour vers décision (si résolu) -->
+        <path d="M 50 476 L 20 476 L 20 370 L 40 370" fill="none" stroke="#9C9690" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr-gray)"/>
+
+        <!-- Étape 5 : délivrance TF -->
+        <rect x="390" y="335" width="220" height="70" rx="8" fill="#1C4731" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="500" y="363" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="13" font-weight="500" fill="#ffffff">5. Titre Foncier délivré</text>
+        <text x="500" y="385" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="rgba(255,255,255,0.7)">Inscription au Livre Foncier</text>
+
+        <!-- Légende durée -->
+        <rect x="390" y="435" width="220" height="48" rx="6" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="500" y="455" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#1C4731" font-weight="500">Durée indicative</text>
+        <text x="500" y="473" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">6 à 18 mois (hors opposition)</text>
+      </svg>
+      <figcaption>Processus d'immatriculation foncière — Loi n° 2020-624 et pratique de la Conservation Foncière</figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ SCHÉMA 2 : LOTISSEMENT ═══ -->
+  <div id="schema-lotissement" class="schema">
+    <p class="sub-heading">Procédure d'autorisation de lotir</p>
+    <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:1.25rem">
+      De la demande d'autorisation à la commercialisation des lots.
+    </p>
+
+    <figure class="diagram-wrap">
+      <svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramme de la procédure de lotissement">
+        <title>Procédure d'autorisation de lotir</title>
+        <desc>Flux en 5 étapes : constitution du dossier, dépôt, instruction, autorisation, réception des travaux</desc>
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#B94E27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr2-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#9C9690" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 5 étapes horizontales avec des connecteurs -->
+        <!-- Étape 1 -->
+        <rect x="30" y="60" width="110" height="80" rx="8" fill="#F5EAE4" stroke="#B94E27" stroke-width="0.5"/>
+        <text x="85" y="88" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">1. Constitution</text>
+        <text x="85" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">du dossier</text>
+        <text x="85" y="122" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#B94E27">Plans, titre, note</text>
+
+        <!-- Flèche 1→2 -->
+        <line x1="140" y1="100" x2="162" y2="100" stroke="#B94E27" stroke-width="1" marker-end="url(#arr2)"/>
+
+        <!-- Étape 2 -->
+        <rect x="162" y="60" width="110" height="80" rx="8" fill="#F5EAE4" stroke="#B94E27" stroke-width="0.5"/>
+        <text x="217" y="88" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">2. Dépôt au</text>
+        <text x="217" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">Ministère</text>
+        <text x="217" y="122" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#B94E27">+ droits de dossier</text>
+
+        <!-- Flèche 2→3 -->
+        <line x1="272" y1="100" x2="294" y2="100" stroke="#B94E27" stroke-width="1" marker-end="url(#arr2)"/>
+
+        <!-- Étape 3 -->
+        <rect x="294" y="60" width="110" height="80" rx="8" fill="#F5EAE4" stroke="#B94E27" stroke-width="0.5"/>
+        <text x="349" y="88" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">3. Instruction</text>
+        <text x="349" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#7A3318">technique</text>
+        <text x="349" y="122" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#B94E27">3 mois maximum</text>
+
+        <!-- Flèche 3→ décision -->
+        <line x1="404" y1="100" x2="426" y2="100" stroke="#B94E27" stroke-width="1" marker-end="url(#arr2)"/>
+
+        <!-- Décision conformité -->
+        <polygon points="481,60 560,100 481,140 402,100" fill="#FDF4E0" stroke="#B87B0A" stroke-width="0.5"/>
+        <text x="481" y="96" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#7A6210" font-weight="500">Conforme</text>
+        <text x="481" y="110" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#7A6210" font-weight="500">aux PU ?</text>
+
+        <!-- Oui → étape 4 (bas) -->
+        <line x1="481" y1="140" x2="481" y2="210" stroke="#B94E27" stroke-width="1" marker-end="url(#arr2)"/>
+        <text x="492" y="178" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#B94E27">Oui</text>
+
+        <!-- Non → retour (gauche) -->
+        <line x1="402" y1="100" x2="383" y2="100" stroke="#9C9690" stroke-width="0.8" stroke-dasharray="4 3"/>
+        <text x="388" y="92" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C9690">Non</text>
+        <path d="M 380 100 L 380 180 L 85 180 L 85 142" fill="none" stroke="#9C9690" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr2-gray)"/>
+        <text x="230" y="196" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C9690">Dossier renvoyé pour correction</text>
+
+        <!-- Étape 4 : Autorisation -->
+        <rect x="390" y="210" width="180" height="64" rx="8" fill="#B94E27" stroke="#B94E27" stroke-width="0.5"/>
+        <text x="480" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="13" font-weight="500" fill="#ffffff">4. Autorisation de lotir</text>
+        <text x="480" y="256" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="rgba(255,255,255,0.75)">Arrêté ministériel</text>
+
+        <!-- Flèche 4→5 -->
+        <line x1="480" y1="274" x2="480" y2="308" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Étape 5 : Travaux et réception -->
+        <rect x="390" y="308" width="180" height="64" rx="8" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="480" y="332" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#1C4731">5. Travaux + réception</text>
+        <text x="480" y="352" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">PV de conformité</text>
+
+        <!-- Flèche → commercialisation -->
+        <line x1="480" y1="372" x2="480" y2="400" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <rect x="390" y="400" width="180" height="52" rx="8" fill="#1C4731" stroke="#1C4731"/>
+        <text x="480" y="420" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#ffffff">Commercialisation</text>
+        <text x="480" y="440" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="rgba(255,255,255,0.7)">Attribution des lots</text>
+      </svg>
+      <figcaption>Procédure d'autorisation de lotir — Loi n° 2020-624</figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ SCHÉMA 3 : CERTIFICATION RURALE ═══ -->
+  <div id="schema-rural" class="schema">
+    <p class="sub-heading">Certification foncière rurale</p>
+    <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:1.25rem">
+      Du droit coutumier au Titre Foncier en zone rurale.
+    </p>
+
+    <figure class="diagram-wrap">
+      <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramme de la certification foncière rurale">
+        <title>Certification foncière rurale</title>
+        <desc>Processus de formalisation des droits coutumiers en 4 étapes : droits coutumiers, enquête contradictoire, CFR, Titre Foncier</desc>
+        <defs>
+          <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#B87B0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- 4 blocs horizontaux -->
+        <!-- Bloc 1 : Droits coutumiers -->
+        <rect x="20" y="70" width="140" height="100" rx="8" fill="#FDF4E0" stroke="#B87B0A" stroke-width="0.5"/>
+        <text x="90" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">Droits</text>
+        <text x="90" y="120" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">coutumiers</text>
+        <text x="90" y="140" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C8320">Usage traditionnel</text>
+        <text x="90" y="156" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C8320">non écrit</text>
+
+        <!-- Flèche 1→2 -->
+        <line x1="160" y1="120" x2="186" y2="120" stroke="#B87B0A" stroke-width="1" marker-end="url(#arr3)"/>
+
+        <!-- Bloc 2 : Enquête + CGFR -->
+        <rect x="186" y="70" width="140" height="100" rx="8" fill="#FDF4E0" stroke="#B87B0A" stroke-width="0.5"/>
+        <text x="256" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">Enquête</text>
+        <text x="256" y="120" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">contradictoire</text>
+        <text x="256" y="140" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C8320">CGFR + Sous-préfet</text>
+        <text x="256" y="156" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#9C8320">PV de délimitation</text>
+
+        <!-- Flèche 2→3 -->
+        <line x1="326" y1="120" x2="352" y2="120" stroke="#B87B0A" stroke-width="1" marker-end="url(#arr3)"/>
+
+        <!-- Bloc 3 : CFR -->
+        <rect x="352" y="70" width="140" height="100" rx="8" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="422" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#1C4731">Certificat</text>
+        <text x="422" y="120" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#1C4731">Foncier Rural</text>
+        <text x="422" y="140" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#2D6B47">Délivré par Sous-préfet</text>
+        <text x="422" y="156" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#2D6B47">Valide 3 ans (renouvelable)</text>
+
+        <!-- Flèche 3→4 -->
+        <line x1="492" y1="120" x2="518" y2="120" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Bloc 4 : TF -->
+        <rect x="518" y="70" width="162" height="100" rx="8" fill="#1C4731" stroke="#1C4731"/>
+        <text x="599" y="104" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#ffffff">Titre Foncier</text>
+        <text x="599" y="120" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#ffffff">+ Bornage</text>
+        <text x="599" y="140" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Conservation Foncière</text>
+        <text x="599" y="156" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Propriété définitive</text>
+
+        <!-- Acteurs en bas -->
+        <text x="90"  y="220" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Communauté</text>
+        <text x="256" y="220" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Sous-préfet + CGFR</text>
+        <text x="422" y="220" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Sous-préfet</text>
+        <text x="599" y="220" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Conservation Foncière</text>
+
+        <!-- Ligne pointillée acteurs -->
+        <line x1="90" y1="170" x2="90" y2="210" stroke="#DDD8CE" stroke-width="0.5" stroke-dasharray="3 3"/>
+        <line x1="256" y1="170" x2="256" y2="210" stroke="#DDD8CE" stroke-width="0.5" stroke-dasharray="3 3"/>
+        <line x1="422" y1="170" x2="422" y2="210" stroke="#DDD8CE" stroke-width="0.5" stroke-dasharray="3 3"/>
+        <line x1="599" y1="170" x2="599" y2="210" stroke="#DDD8CE" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+        <!-- Durée indicative -->
+        <rect x="20" y="280" width="660" height="44" rx="6" fill="#F5F0E8" stroke="#EAE5DC" stroke-width="0.5"/>
+        <text x="350" y="298" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#6B6560" font-weight="500">Durée indicative</text>
+        <text x="350" y="315" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Enquête : 2-3 mois · CFR : 1-2 mois · Immatriculation : 6-18 mois</text>
+
+        <!-- Note restriction étrangers -->
+        <text x="350" y="358" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#B87B0A">⚠ Seuls les citoyens ivoiriens peuvent être propriétaires de terres rurales (loi 2004-412)</text>
+      </svg>
+      <figcaption>Certification foncière rurale — Loi n° 98-750 et loi n° 2004-412</figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ SCHÉMA 4 : HIÉRARCHIE DES TITRES ═══ -->
+  <div id="schema-hierarchie" class="schema">
+    <p class="sub-heading">Hiérarchie des actes et titres</p>
+    <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:1.25rem">
+      Valeur juridique comparative des différents actes fonciers en Côte d'Ivoire.
+    </p>
+
+    <figure class="diagram-wrap">
+      <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pyramide des actes fonciers">
+        <title>Hiérarchie des actes fonciers</title>
+        <desc>Pyramide montrant la valeur juridique croissante des actes fonciers, du bas vers le haut : droits coutumiers, lettre d'attribution, permis d'habiter, ACP, ACD, Titre Foncier</desc>
+
+        <!-- Pyramide -->
+        <!-- Niveau 1 : Bas - droits coutumiers (rural) -->
+        <rect x="60" y="360" width="580" height="52" rx="6" fill="#FDF4E0" stroke="#B87B0A" stroke-width="0.5"/>
+        <text x="350" y="380" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A6210">Droits coutumiers / Lettre d'attribution</text>
+        <text x="350" y="400" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C8320">Précaire — révocable — sans valeur légale opposable aux tiers</text>
+
+        <!-- Niveau 2 : Permis d'habiter / ACP -->
+        <rect x="100" y="290" width="500" height="52" rx="6" fill="#F5EAE4" stroke="#B94E27" stroke-width="0.5"/>
+        <text x="350" y="310" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#7A3318">Permis d'Habiter (PH) · ACP</text>
+        <text x="350" y="330" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#B94E27">Droit réel provisoire — permet de construire — hypothécable</text>
+
+        <!-- Niveau 3 : ACD / CFR -->
+        <rect x="140" y="220" width="420" height="52" rx="6" fill="#E8F0EB" stroke="#1C4731" stroke-width="0.5"/>
+        <text x="350" y="240" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" font-weight="500" fill="#1C4731">ACD · Certificat Foncier Rural (CFR)</text>
+        <text x="350" y="260" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#2D6B47">Droit définitif d'occupation — étape avant immatriculation</text>
+
+        <!-- Niveau 4 : Titre Foncier -->
+        <rect x="200" y="140" width="300" height="62" rx="6" fill="#1C4731" stroke="#1C4731"/>
+        <text x="350" y="164" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="14" font-weight="500" fill="#ffffff">Titre Foncier (TF)</text>
+        <text x="350" y="184" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="rgba(255,255,255,0.75)">Propriété absolue · Définitif · Imprescriptible</text>
+
+        <!-- Flèche ascendante à gauche -->
+        <line x1="40" y1="390" x2="40" y2="160" stroke="#1C4731" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="30" y="280" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#1C4731" transform="rotate(-90, 30, 280)">Valeur juridique croissante</text>
+
+        <!-- Labels côté droit -->
+        <text x="660" y="390" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Niveau 1</text>
+        <text x="660" y="320" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Niveau 2</text>
+        <text x="660" y="250" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#9C9690">Niveau 3</text>
+        <text x="660" y="175" text-anchor="start" font-family="'DM Sans', sans-serif" font-size="11" fill="#1C4731" font-weight="500">Niveau 4</text>
+      </svg>
+      <figcaption>Pyramide des actes fonciers — Valeur juridique comparative</figcaption>
+    </figure>
+
+    <div class="note">
+      Le Titre Foncier est la seule preuve irréfutable de propriété. Tous les autres actes sont des étapes intermédiaires. 
+      Une transaction basée sur un acte de niveau 1 ou 2 comporte des risques juridiques élevés.
+    </div>
+  </div>
+
+</main>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <strong>Foncier Ivoirien</strong>
+      <p>Schémas et graphiques des processus fonciers<br>en Côte d'Ivoire.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="../index.html">Guide foncier</a></li>
+        <li><a href="annuaire.html">Annuaire</a></li>
+        <li><a href="graphiques.html">Graphiques</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    Schémas à titre illustratif. Loi n° 2020-624 et loi n° 98-750.
+  </div>
+</footer>
+
+<script>
+// Gestion de la navigation entre schémas
+(function () {
+  var btns    = document.querySelectorAll('.schema-nav__btn');
+  var schemas = document.querySelectorAll('.schema');
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = this.dataset.schema;
+
+      btns.forEach(function (b) { b.classList.remove('is-active'); });
+      schemas.forEach(function (s) { s.classList.remove('is-active'); });
+
+      this.classList.add('is-active');
+      var el = document.getElementById('schema-' + target);
+      if (el) el.classList.add('is-active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+/* ============================================================
+   variables.css — Design tokens
+   Modifier ce fichier pour changer les couleurs/fonts globalement
+   ============================================================ */
+
+:root {
+  /* Couleurs principales */
+  --color-bg:            #F5F0E8;
+  --color-bg-card:       #FFFFFF;
+  --color-bg-muted:      #EDE8DF;
+  --color-bg-muted-2:    #E6DFD3;
+
+  /* Texte */
+  --color-text:          #1A1814;
+  --color-text-muted:    #6B6560;
+  --color-text-light:    #9C9690;
+
+  /* Vert (couleur primaire) */
+  --color-green:         #1C4731;
+  --color-green-mid:     #2D6B47;
+  --color-green-light:   #E8F0EB;
+  --color-green-border:  rgba(28, 71, 49, 0.18);
+
+  /* Terracotta (danger / alerte) */
+  --color-terra:         #B94E27;
+  --color-terra-light:   #F5EAE4;
+
+  /* Ambre (avertissement) */
+  --color-amber:         #B87B0A;
+  --color-amber-light:   #FDF4E0;
+
+  /* Bordures */
+  --color-border:        #DDD8CE;
+  --color-border-light:  #EAE5DC;
+
+  /* Typographie */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* Rayons */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+
+  /* Ombres */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-md:  0 2px 8px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+
+  /* Transitions */
+  --transition: 0.15s ease;
+
+  /* Largeur max du contenu */
+  --max-width: 860px;
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "nom": "Cabinet KONAN & Associés",
+    "categorie": "Géomètre expert",
+    "agrement": "OGECI-2018-042",
+    "ville": "Abidjan — Plateau",
+    "adresse": "Immeuble Proximité, 3e étage, Avenue Nogues",
+    "telephone": "+225 27 20 21 43 10",
+    "email": "contact@konan-geometre.ci",
+    "lat": 5.3212,
+    "lng": -4.0165
+  },
+  {
+    "id": 2,
+    "nom": "Cabinet YAPI Sylvestre",
+    "categorie": "Géomètre expert",
+    "agrement": "OGECI-2015-017",
+    "ville": "Bouaké",
+    "adresse": "Quartier Commerce, Rue du Commerce",
+    "telephone": "+225 27 31 63 20 00",
+    "email": "yapi.geometre@gmail.com",
+    "lat": 7.6931,
+    "lng": -5.0299
+  },
+  {
+    "id": 3,
+    "nom": "Maître KOFFI Armand",
+    "categorie": "Notaire",
+    "agrement": "Chambre des Notaires CI — #087",
+    "ville": "Abidjan — Cocody",
+    "adresse": "Rue des Jardins, Cocody-les-Deux-Plateaux",
+    "telephone": "+225 27 22 41 52 00",
+    "email": "notaire.koffi@ci.notaires.org",
+    "lat": 5.3632,
+    "lng": -3.9841
+  },
+  {
+    "id": 4,
+    "nom": "Maître COULIBALY Fanta",
+    "categorie": "Avocat foncier",
+    "agrement": "",
+    "ville": "Abidjan — Marcory",
+    "adresse": "Boulevard de Marseille, Immeuble Alpha",
+    "telephone": "+225 27 21 35 44 00",
+    "email": "coulibaly.avocat@barreauci.org",
+    "lat": 5.3004,
+    "lng": -4.0038
+  },
+  {
+    "id": 5,
+    "nom": "Conservation Foncière d'Abidjan",
+    "categorie": "Conservation foncière",
+    "agrement": "",
+    "ville": "Abidjan — Plateau",
+    "adresse": "Boulevard Carde, face au Trésor Public",
+    "telephone": "+225 27 20 21 28 90",
+    "email": "",
+    "lat": 5.3196,
+    "lng": -4.0128
+  },
+  {
+    "id": 6,
+    "nom": "Conservation Foncière de Yamoussoukro",
+    "categorie": "Conservation foncière",
+    "agrement": "",
+    "ville": "Yamoussoukro",
+    "adresse": "Rue du Lac",
+    "telephone": "+225 27 30 64 12 00",
+    "email": "",
+    "lat": 6.8206,
+    "lng": -5.2767
+  },
+  {
+    "id": 7,
+    "nom": "Cabinet DJAGO Immobilier",
+    "categorie": "Promoteur immobilier",
+    "agrement": "",
+    "ville": "San Pedro",
+    "adresse": "Avenue des palmiers, Quartier Balmer",
+    "telephone": "+225 27 34 71 00 00",
+    "email": "djago.immo@gmail.com",
+    "lat": 4.7463,
+    "lng": -6.6323
+  }
+]

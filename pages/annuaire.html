@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annuaire des professionnels — Foncier Ivoirien</title>
+  <meta name="description" content="Annuaire cartographique des professionnels de la chaîne foncière en Côte d'Ivoire : géomètres experts, notaires, avocats fonciers.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS du projet -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+
+  <!-- Leaflet.js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- Styles spécifiques à la page annuaire -->
+  <style>
+    /* Carte */
+    #pro-map {
+      height: 500px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      margin-bottom: 1.5rem;
+      background: var(--color-bg-muted);
+    }
+
+    /* Barre de filtres */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    .filter-bar label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+
+    .filter-bar input[type="text"],
+    .filter-bar select {
+      flex: 1;
+      min-width: 180px;
+      padding: 7px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color var(--transition);
+    }
+
+    .filter-bar input[type="text"]:focus,
+    .filter-bar select:focus {
+      outline: none;
+      border-color: var(--color-green-mid);
+    }
+
+    /* Popups Leaflet */
+    .map-popup {
+      font-family: var(--font-body);
+      min-width: 200px;
+    }
+    .map-popup__category {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--color-green);
+      margin-bottom: 4px;
+    }
+    .map-popup__name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1A1814;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .map-popup__agrement {
+      font-size: 12px;
+      color: #6B6560;
+      margin-bottom: 4px;
+    }
+    .map-popup__ville {
+      font-size: 13px;
+      color: #6B6560;
+      margin-bottom: 6px;
+    }
+    .map-popup__contact {
+      font-size: 13px;
+    }
+    .map-popup__contact a {
+      color: #2D6B47;
+    }
+
+    /* Marqueur personnalisé */
+    .map-marker {
+      background: transparent !important;
+      border: none !important;
+    }
+
+    /* Stats au-dessus de la carte */
+    .map-stats {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Légende catégories */
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      font-size: 13px;
+    }
+
+    .legend__item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-text-muted);
+    }
+
+    .legend__dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Contribuer */
+    .contribute-box {
+      background: var(--color-bg-card);
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .contribute-box h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .contribute-box p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── En-tête ─── -->
+<header class="page-header">
+  <div class="page-header__inner">
+    <a href="../index.html" class="page-header__back">← Retour au guide</a>
+    <h1>Annuaire des professionnels</h1>
+    <p>Géomètres experts, notaires, avocats fonciers, conservations foncières — Côte d'Ivoire</p>
+  </div>
+</header>
+
+<!-- ─── Navigation site ─── -->
+<div class="site-nav">
+  <div class="site-nav__inner">
+    <a href="../index.html">Guide</a>
+    <a href="annuaire.html" class="is-current">Annuaire</a>
+    <a href="graphiques.html">Graphiques</a>
+  </div>
+</div>
+
+<!-- ─── Contenu ─── -->
+<main class="main">
+
+  <!-- Stats -->
+  <div class="map-stats">
+    <div class="stat-card">
+      <div class="stat-card__value" id="pro-count">—</div>
+      <div class="stat-card__label">Professionnels référencés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__value">5</div>
+      <div class="stat-card__label">Catégories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__value">CI</div>
+      <div class="stat-card__label">Côte d'Ivoire</div>
+    </div>
+  </div>
+
+  <!-- Légende -->
+  <div class="legend">
+    <div class="legend__item"><div class="legend__dot" style="background:#1C4731"></div> Géomètre expert</div>
+    <div class="legend__item"><div class="legend__dot" style="background:#2D6B47"></div> Notaire</div>
+    <div class="legend__item"><div class="legend__dot" style="background:#B94E27"></div> Avocat foncier</div>
+    <div class="legend__item"><div class="legend__dot" style="background:#B87B0A"></div> Conservation foncière</div>
+    <div class="legend__item"><div class="legend__dot" style="background:#4A6FA5"></div> Promoteur immobilier</div>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filter-bar">
+    <label for="search-pro">Rechercher</label>
+    <input type="text" id="search-pro" placeholder="Nom, ville…" autocomplete="off">
+    <label for="filter-categorie">Catégorie</label>
+    <select id="filter-categorie">
+      <option value="">Toutes les catégories</option>
+    </select>
+  </div>
+
+  <!-- Carte Leaflet -->
+  <div id="pro-map" role="region" aria-label="Carte des professionnels fonciers"></div>
+
+  <!-- Notice contribution -->
+  <div class="contribute-box">
+    <h3>Vous êtes un professionnel de la chaîne foncière ?</h3>
+    <p>
+      Pour figurer dans l'annuaire, ajoutez vos informations dans le fichier
+      <code>data/professionnels.json</code> en suivant le modèle existant,
+      ou contactez l'administrateur du site.
+    </p>
+    <a href="https://github.com" class="btn btn--outline" target="_blank" rel="noopener">
+      Contribuer sur GitHub
+    </a>
+  </div>
+
+</main>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <strong>Foncier Ivoirien</strong>
+      <p>Annuaire cartographique des professionnels<br>de la chaîne foncière en Côte d'Ivoire.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="../index.html">Guide foncier</a></li>
+        <li><a href="annuaire.html">Annuaire</a></li>
+        <li><a href="graphiques.html">Graphiques</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    Les informations de cet annuaire sont données à titre indicatif. Vérifiez toujours l'agrément d'un professionnel auprès de l'OGECI.
+  </div>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Script carte (chemin relatif depuis pages/) -->
+<script src="../js/map.js"></script>
+
+</body>
+</html>
