@@ -18,8 +18,8 @@
  */
 
 // ─── À REMPLACER PAR VOS VALEURS SUPABASE ───────────────────────────────────
-var SUPABASE_URL      = 'https://VOTRE-PROJET.supabase.co';
-var SUPABASE_ANON_KEY = 'VOTRE-CLE-ANON-PUBLIC';
+var SUPABASE_URL      = 'https://bphfqzricrjoizhpqtwl.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_Szecy3P5Ha65fb4RTT3d9g_qerz6OVh';
 // ────────────────────────────────────────────────────────────────────────────
 
 var _supabase = null;
