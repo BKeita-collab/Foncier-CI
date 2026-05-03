@@ -38,6 +38,10 @@ function getClient() {
   return _supabase;
 }
 
+await supabase.auth.resetPasswordForEmail(email, {
+  redirectTo: 'https://riding-buffed-quarry.ngrok-free.dev/reset-password',
+});
+
 /**
  * Connexion avec email + mot de passe.
  * Retourne { user, error }
