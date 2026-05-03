@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace professionnel — Foncier Ivoirien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <style>
+    /* Écran de chargement pendant vérification auth */
+    .auth-loading {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .spinner-lg {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--color-border);
+      border-top-color: var(--color-green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Contenu caché jusqu'à auth OK */
+    .pro-content { display: none; }
+    .pro-content.is-visible { display: block; }
+
+    /* Badge de bienvenue */
+    .welcome-bar {
+      background: var(--color-green-light);
+      border: 1px solid var(--color-green-border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-bar__text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-green);
+      margin-bottom: 2px;
+    }
+
+    .welcome-bar__text span {
+      font-size: 13px;
+      color: #2D5A3D;
+    }
+
+    /* Grille des ressources pro */
+    .pro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .pro-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .pro-card:hover {
+      border-color: var(--color-green-border);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .pro-card__icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-green-light);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 20px;
+    }
+
+    .pro-card h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--color-text);
+    }
+
+    .pro-card p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .pro-card__badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--color-green-light);
+      color: var(--color-green);
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    /* Section "bientôt disponible" */
+    .coming-soon {
+      opacity: 0.5;
+      cursor: default;
+    }
+    .coming-soon:hover { transform: none; box-shadow: none; border-color: var(--color-border); }
+    .coming-soon .pro-card__badge {
+      background: var(--color-bg-muted);
+      color: var(--color-text-light);
+    }
+  </style>
+</head>
+<body>
+
+<!-- En-tête -->
+<header class="page-header">
+  <div class="page-header__inner">
+    <a href="../index.html" class="page-header__back">← Retour au guide</a>
+    <h1>Espace professionnel</h1>
+    <p>Ressources exclusives pour les professionnels de la chaîne foncière</p>
+  </div>
+</header>
+
+<!-- Navigation site -->
+<div class="site-nav">
+  <div class="site-nav__inner">
+    <a href="../index.html">Guide</a>
+    <a href="annuaire.html">Annuaire</a>
+    <a href="demarches.html">Démarches</a>
+    <a href="graphiques.html">Graphiques</a>
+    <a href="espace-pro.html" class="is-current">Espace pro</a>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- Spinner pendant vérification -->
+  <div class="auth-loading" id="auth-loading">
+    <div class="spinner-lg"></div>
+    <span>Vérification de votre accès…</span>
+  </div>
+
+  <!-- Contenu protégé -->
+  <div class="pro-content" id="pro-content">
+
+    <!-- Barre de bienvenue -->
+    <div class="welcome-bar">
+      <div class="welcome-bar__text">
+        <strong id="welcome-name">Bienvenue</strong>
+        <span id="welcome-profession">Professionnel de la chaîne foncière</span>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn--outline" style="font-size:13px;padding:7px 16px;">
+        Se déconnecter
+      </button>
+    </div>
+
+    <!-- Ressources disponibles -->
+    <p class="sub-heading">Ressources disponibles</p>
+
+    <div class="pro-grid">
+
+      <a href="geocodeur.html" class="pro-card">
+        <div class="pro-card__icon">📍</div>
+        <h3>Géocodeur d'adresses</h3>
+        <p>Convertissez des adresses en coordonnées GPS pour alimenter l'annuaire des professionnels.</p>
+        <span class="pro-card__badge">Disponible</span>
+      </a>
+
+      <a href="demarches.html" class="pro-card">
+        <div class="pro-card__icon">📋</div>
+        <h3>Guide des démarches</h3>
+        <p>Processus fonciers détaillés avec références aux articles de loi. Étape par étape.</p>
+        <span class="pro-card__badge">Disponible</span>
+      </a>
+
+      <div class="pro-card coming-soon">
+        <div class="pro-card__icon">📄</div>
+        <h3>Modèles de documents</h3>
+        <p>Attestations, procès-verbaux de bornage, états parcellaires — modèles éditables.</p>
+        <span class="pro-card__badge">Bientôt disponible</span>
+      </div>
+
+      <div class="pro-card coming-soon">
+        <div class="pro-card__icon">💬</div>
+        <h3>Forum professionnel</h3>
+        <p>Échangez avec d'autres géomètres, notaires et avocats fonciers de Côte d'Ivoire.</p>
+        <span class="pro-card__badge">Bientôt disponible</span>
+      </div>
+
+      <div class="pro-card coming-soon">
+        <div class="pro-card__icon">📊</div>
+        <h3>Statistiques foncières</h3>
+        <p>Données sur les immatriculations, lotissements et certificats fonciers par région.</p>
+        <span class="pro-card__badge">Bientôt disponible</span>
+      </div>
+
+      <div class="pro-card coming-soon">
+        <div class="pro-card__icon">🔔</div>
+        <h3>Actualités réglementaires</h3>
+        <p>Circulaires, arrêtés et modifications législatives en temps réel.</p>
+        <span class="pro-card__badge">Bientôt disponible</span>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <strong>Foncier Ivoirien</strong>
+      <p>Espace réservé aux professionnels<br>de la chaîne foncière.</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    Accès réservé aux professionnels agréés. Toute diffusion des ressources est interdite.
+  </div>
+</footer>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+  (async function () {
+    // Vérifier l'authentification
+    var result = await Auth.requireAuth('professionnel', 'login.html');
+
+    document.getElementById('auth-loading').style.display = 'none';
+
+    if (!result) return; // requireAuth a déjà redirigé
+
+    // Afficher le contenu
+    document.getElementById('pro-content').classList.add('is-visible');
+
+    // Personaliser le message de bienvenue
+    if (result.profile) {
+      document.getElementById('welcome-name').textContent =
+        'Bienvenue, ' + (result.profile.nom || result.user.email);
+      document.getElementById('welcome-profession').textContent =
+        result.profile.profession || 'Professionnel de la chaîne foncière';
+    }
+  })();
+</script>
+
+</body>
+</html>

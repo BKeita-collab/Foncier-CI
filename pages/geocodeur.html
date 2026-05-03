@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Géocodeur d'adresses — Foncier Ivoirien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* ── Formulaire de recherche ── */
+    .search-box {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-box h2 {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .search-box > p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .search-field {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .search-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color 0.15s;
+    }
+
+    .search-field input:focus {
+      outline: none;
+      border-color: var(--color-green-mid);
+      background: var(--color-bg-card);
+    }
+
+    /* ── Résultats ── */
+    .results-section { display: none; }
+    .results-section.is-visible { display: block; }
+
+    .results-list {
+      margin-bottom: 1.25rem;
+    }
+
+    .result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .result-item:hover,
+    .result-item.is-selected {
+      border-color: var(--color-green);
+      background: var(--color-green-light);
+    }
+
+    .result-item__icon {
+      color: var(--color-green);
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .result-item__name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 2px;
+    }
+
+    .result-item__addr {
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .result-item__coords {
+      margin-left: auto;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .result-item__coords code {
+      font-size: 12px;
+      background: var(--color-bg-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: block;
+      margin-bottom: 3px;
+      font-family: 'Courier New', monospace;
+      color: var(--color-green);
+    }
+
+    /* ── Mini-carte ── */
+    #preview-map {
+      height: 300px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Générateur JSON ── */
+    .json-gen {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .json-gen h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .json-gen > p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .json-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 560px) {
+      .json-fields { grid-template-columns: 1fr; }
+    }
+
+    .json-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-light);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .json-field input,
+    .json-field select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    .json-field input:focus,
+    .json-field select:focus {
+      outline: none;
+      border-color: var(--color-green-mid);
+    }
+
+    /* Bloc code JSON */
+    .json-output {
+      background: #1A1814;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .json-output pre {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #E8DFD0;
+      line-height: 1.7;
+      margin: 0;
+      white-space: pre;
+    }
+
+    .json-output .key    { color: #7CC5A5; }
+    .json-output .str    { color: #F0C678; }
+    .json-output .num    { color: #B5CEA8; }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-sm);
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .copy-btn.copied { color: #7CC5A5; border-color: #7CC5A5; }
+
+    /* ── États ── */
+    .loading-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .error-state {
+      background: var(--color-terra-light);
+      border: 1px solid rgba(185, 78, 39, 0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--color-terra);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--color-border);
+      border-top-color: var(--color-green);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Compteur next-id */
+    .next-id-hint {
+      font-size: 12px;
+      color: var(--color-text-light);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="page-header__inner">
+    <a href="../index.html" class="page-header__back">← Retour au guide</a>
+    <h1>Géocodeur d'adresses</h1>
+    <p>Convertissez une adresse en coordonnées GPS — prêt à copier dans <code>professionnels.json</code></p>
+  </div>
+</header>
+
+<div class="site-nav">
+  <div class="site-nav__inner">
+    <a href="../index.html">Guide</a>
+    <a href="annuaire.html">Annuaire</a>
+    <a href="demarches.html">Démarches</a>
+    <a href="graphiques.html">Graphiques</a>
+    <a href="espace-pro.html">Espace pro</a>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- ── Formulaire ── -->
+  <div class="search-box">
+    <h2>Rechercher une adresse</h2>
+    <p>Entrez l'adresse du professionnel. La recherche est limitée à la Côte d'Ivoire.</p>
+
+    <div class="search-row">
+      <div class="search-field" style="flex:2">
+        <label for="addr-input">Adresse</label>
+        <input type="text" id="addr-input"
+          placeholder="Ex : Immeuble Proximité, Avenue Nogues, Plateau, Abidjan"
+          autocomplete="off">
+      </div>
+      <div class="search-field" style="flex:1">
+        <label for="city-input">Ville (optionnel)</label>
+        <input type="text" id="city-input" placeholder="Ex : Abidjan">
+      </div>
+      <button class="btn btn--primary" onclick="geocode()" id="search-btn">
+        Rechercher
+      </button>
+    </div>
+
+    <p style="font-size:12px;color:var(--color-text-light);margin-top:10px;margin-bottom:0">
+      Source : OpenStreetMap Nominatim — gratuit, sans clé API
+    </p>
+  </div>
+
+  <!-- ── Résultats ── -->
+  <div class="results-section" id="results-section">
+
+    <div id="results-state"></div>
+
+    <!-- Mini-carte -->
+    <div id="preview-map" style="display:none"></div>
+
+    <!-- Générateur JSON -->
+    <div class="json-gen" id="json-gen" style="display:none">
+      <h3>Générer l'entrée JSON</h3>
+      <p>Complétez les informations du professionnel, puis copiez le JSON dans <code>data/professionnels.json</code>.</p>
+
+      <div class="json-fields">
+        <div class="json-field">
+          <label>Nom / Cabinet</label>
+          <input type="text" id="field-nom" placeholder="Cabinet Exemple" oninput="updateJson()">
+        </div>
+        <div class="json-field">
+          <label>Catégorie</label>
+          <select id="field-categorie" onchange="updateJson()">
+            <option>Géomètre expert</option>
+            <option>Notaire</option>
+            <option>Avocat foncier</option>
+            <option>Conservation foncière</option>
+            <option>Promoteur immobilier</option>
+          </select>
+        </div>
+        <div class="json-field">
+          <label>N° agrément (optionnel)</label>
+          <input type="text" id="field-agrement" placeholder="Ex : OGECI-2024-099" oninput="updateJson()">
+        </div>
+        <div class="json-field">
+          <label>Ville</label>
+          <input type="text" id="field-ville" placeholder="Ex : Abidjan — Plateau" oninput="updateJson()">
+        </div>
+        <div class="json-field">
+          <label>Téléphone</label>
+          <input type="tel" id="field-tel" placeholder="+225 27 00 00 00 00" oninput="updateJson()">
+        </div>
+        <div class="json-field">
+          <label>Email</label>
+          <input type="email" id="field-email" placeholder="contact@exemple.ci" oninput="updateJson()">
+        </div>
+      </div>
+
+      <div class="note" style="margin-bottom:1rem">
+        ID et coordonnées GPS remplis automatiquement depuis la sélection.
+        <span class="next-id-hint" id="next-id-hint"></span>
+      </div>
+
+      <!-- Sortie JSON colorée -->
+      <div class="json-output" id="json-output">
+        <button class="copy-btn" id="copy-btn" onclick="copyJson()">Copier</button>
+        <pre id="json-pre">Sélectionnez un résultat pour générer le JSON.</pre>
+      </div>
+
+      <p style="font-size:13px;color:var(--color-text-muted)">
+        Collez ce bloc dans le tableau de <code>data/professionnels.json</code>, 
+        après la dernière entrée existante (avant le <code>]</code> final). 
+        N'oubliez pas la virgule après l'entrée précédente.
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <strong>Foncier Ivoirien</strong>
+      <p>Outil de géocodage pour l'annuaire<br>des professionnels fonciers.</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    Géocodage fourni par Nominatim / OpenStreetMap. Usage conforme aux conditions d'utilisation Nominatim.
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var selectedResult = null;
+var previewMap     = null;
+var previewMarker  = null;
+
+/* ── Géocodage ── */
+async function geocode() {
+  var addr  = document.getElementById('addr-input').value.trim();
+  var city  = document.getElementById('city-input').value.trim();
+  var btn   = document.getElementById('search-btn');
+
+  if (!addr) { alert('Veuillez entrer une adresse.'); return; }
+
+  var query = addr + (city ? ', ' + city : '') + ', Côte d\'Ivoire';
+
+  btn.disabled   = true;
+  btn.innerHTML  = '<span class="spinner"></span> Recherche…';
+
+  showSection();
+  setState('<div class="loading-state"><span class="spinner"></span> Recherche en cours…</div>');
+  document.getElementById('preview-map').style.display = 'none';
+  document.getElementById('json-gen').style.display    = 'none';
+
+  try {
+    var url = 'https://nominatim.openstreetmap.org/search?'
+      + 'q=' + encodeURIComponent(query)
+      + '&countrycodes=ci'
+      + '&format=json'
+      + '&limit=5'
+      + '&addressdetails=1';
+
+    var res  = await fetch(url, { headers: { 'Accept-Language': 'fr', 'User-Agent': 'FoncierIvoirien/1.0' } });
+    var data = await res.json();
+
+    if (!data || data.length === 0) {
+      setState('<div class="no-results">Aucun résultat trouvé.<br><small>Essayez avec moins de détails (ex : "Plateau Abidjan").</small></div>');
+    } else {
+      renderResults(data);
+    }
+  } catch(e) {
+    setState('<div class="error-state">Erreur de connexion au géocodeur. Vérifiez votre connexion internet.</div>');
+  }
+
+  btn.disabled  = false;
+  btn.innerHTML = 'Rechercher';
+}
+
+/* ── Affiche les résultats ── */
+function renderResults(data) {
+  var html = '<p class="sub-heading" style="font-size:1rem;margin-bottom:1rem">' + data.length + ' résultat(s) trouvé(s)</p>';
+  html += '<div class="results-list">';
+
+  data.forEach(function(item, i) {
+    var lat  = parseFloat(item.lat).toFixed(6);
+    var lng  = parseFloat(item.lon).toFixed(6);
+    var name = item.name || item.display_name.split(',')[0];
+    var addr = item.display_name;
+
+    html += [
+      '<div class="result-item" id="result-' + i + '" onclick="selectResult(' + i + ', ' + JSON.stringify(item).replace(/"/g, '&quot;') + ')">',
+        '<div class="result-item__icon">📍</div>',
+        '<div>',
+          '<div class="result-item__name">' + name + '</div>',
+          '<div class="result-item__addr">' + addr + '</div>',
+        '</div>',
+        '<div class="result-item__coords">',
+          '<code>lat: ' + lat + '</code>',
+          '<code>lng: ' + lng + '</code>',
+        '</div>',
+      '</div>',
+    ].join('');
+  });
+
+  html += '</div>';
+  setState(html);
+}
+
+/* ── Sélection d'un résultat ── */
+function selectResult(idx, item) {
+  document.querySelectorAll('.result-item').forEach(function(el){ el.classList.remove('is-selected'); });
+  var el = document.getElementById('result-' + idx);
+  if (el) el.classList.add('is-selected');
+
+  selectedResult = item;
+
+  // Remplir la ville depuis le résultat
+  var cityGuess = (item.address && (item.address.city || item.address.town || item.address.municipality)) || '';
+  var districtGuess = (item.address && (item.address.suburb || item.address.quarter)) || '';
+  var villeGuess = cityGuess + (districtGuess ? ' — ' + districtGuess : '');
+  document.getElementById('field-ville').value = villeGuess;
+
+  // Afficher la mini-carte
+  showMiniMap(parseFloat(item.lat), parseFloat(item.lon));
+
+  // Afficher le générateur JSON
+  document.getElementById('json-gen').style.display = 'block';
+
+  updateJson();
+}
+
+/* ── Mini-carte Leaflet ── */
+function showMiniMap(lat, lng) {
+  var mapEl = document.getElementById('preview-map');
+  mapEl.style.display = 'block';
+
+  if (!previewMap) {
+    previewMap = L.map('preview-map', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 19
+    }).addTo(previewMap);
+  }
+
+  previewMap.setView([lat, lng], 16);
+
+  if (previewMarker) previewMap.removeLayer(previewMarker);
+  previewMarker = L.marker([lat, lng]).addTo(previewMap);
+
+  // Forcer Leaflet à recalculer la taille
+  setTimeout(function(){ previewMap.invalidateSize(); }, 100);
+}
+
+/* ── Génère le JSON ── */
+function updateJson() {
+  if (!selectedResult) return;
+
+  var lat = parseFloat(selectedResult.lat).toFixed(6);
+  var lng = parseFloat(selectedResult.lon).toFixed(6);
+
+  var obj = {
+    id:         getNextId(),
+    nom:        document.getElementById('field-nom').value        || 'À compléter',
+    categorie:  document.getElementById('field-categorie').value,
+    agrement:   document.getElementById('field-agrement').value   || '',
+    ville:      document.getElementById('field-ville').value      || 'À compléter',
+    adresse:    selectedResult.display_name,
+    telephone:  document.getElementById('field-tel').value        || '',
+    email:      document.getElementById('field-email').value      || '',
+    lat:        parseFloat(parseFloat(selectedResult.lat).toFixed(6)),
+    lng:        parseFloat(parseFloat(selectedResult.lon).toFixed(6)),
+  };
+
+  renderJson(obj);
+}
+
+function renderJson(obj) {
+  var lines = [
+    '{',
+    '  <span class="key">"id"</span>:        <span class="num">' + obj.id + '</span>,',
+    '  <span class="key">"nom"</span>:       <span class="str">"' + esc(obj.nom) + '"</span>,',
+    '  <span class="key">"categorie"</span>: <span class="str">"' + esc(obj.categorie) + '"</span>,',
+    '  <span class="key">"agrement"</span>:  <span class="str">"' + esc(obj.agrement) + '"</span>,',
+    '  <span class="key">"ville"</span>:     <span class="str">"' + esc(obj.ville) + '"</span>,',
+    '  <span class="key">"adresse"</span>:   <span class="str">"' + esc(obj.adresse) + '"</span>,',
+    '  <span class="key">"telephone"</span>: <span class="str">"' + esc(obj.telephone) + '"</span>,',
+    '  <span class="key">"email"</span>:     <span class="str">"' + esc(obj.email) + '"</span>,',
+    '  <span class="key">"lat"</span>:       <span class="num">' + obj.lat + '</span>,',
+    '  <span class="key">"lng"</span>:       <span class="num">' + obj.lng + '</span>',
+    '}',
+  ];
+  document.getElementById('json-pre').innerHTML = lines.join('\n');
+}
+
+/* ── Copier le JSON ── */
+function copyJson() {
+  if (!selectedResult) return;
+
+  var obj = {
+    id:        getNextId(),
+    nom:       document.getElementById('field-nom').value       || 'À compléter',
+    categorie: document.getElementById('field-categorie').value,
+    agrement:  document.getElementById('field-agrement').value  || '',
+    ville:     document.getElementById('field-ville').value     || 'À compléter',
+    adresse:   selectedResult.display_name,
+    telephone: document.getElementById('field-tel').value       || '',
+    email:     document.getElementById('field-email').value     || '',
+    lat:       parseFloat(parseFloat(selectedResult.lat).toFixed(6)),
+    lng:       parseFloat(parseFloat(selectedResult.lon).toFixed(6)),
+  };
+
+  var text = JSON.stringify(obj, null, 2);
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copié !';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ── Helpers ── */
+function showSection() {
+  document.getElementById('results-section').classList.add('is-visible');
+}
+
+function setState(html) {
+  document.getElementById('results-state').innerHTML = html;
+}
+
+function esc(str) {
+  return (str || '').replace(/"/g, '\\"').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function getNextId() {
+  // Récupère depuis le localStorage un compteur simple (côté client)
+  var next = parseInt(localStorage.getItem('geocoder_next_id') || '8');
+  document.getElementById('next-id-hint').textContent = 'Prochain ID suggéré : ' + next + ' (à vérifier dans votre JSON)';
+  return next;
+}
+
+/* Gérer "Enter" sur le champ adresse */
+document.getElementById('addr-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') geocode();
+});
+
+document.getElementById('city-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') geocode();
+});
+</script>
+
+</body>
+</html>

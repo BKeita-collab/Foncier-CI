@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion — Espace Professionnel — Foncier Ivoirien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg);
+      padding: 2rem 1rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-logo a {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--color-green);
+      text-decoration: none;
+    }
+
+    .login-logo p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .login-card h1 {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .login-card .subtitle {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color 0.15s;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--color-green-mid);
+      background: var(--color-bg-card);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 11px;
+      background: var(--color-green);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-login:hover { background: var(--color-green-mid); }
+    .btn-login:disabled { background: var(--color-text-light); cursor: not-allowed; }
+
+    .error-msg {
+      background: var(--color-terra-light);
+      border: 1px solid rgba(185, 78, 39, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--color-terra);
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .error-msg.is-visible { display: block; }
+
+    .access-denied {
+      background: var(--color-amber-light);
+      border: 1px solid rgba(184, 123, 10, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--color-amber);
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .access-denied.is-visible { display: block; }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--color-green); }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="login-logo">
+      <a href="../index.html">Foncier Ivoirien</a>
+      <p>Côte d'Ivoire · Espace professionnel</p>
+    </div>
+
+    <h1>Connexion</h1>
+    <p class="subtitle">Réservé aux professionnels de la chaîne foncière</p>
+
+    <!-- Message accès refusé (vient du redirect) -->
+    <div class="access-denied" id="access-denied-msg">
+      ⚠ Votre compte n'a pas les droits d'accès à cet espace.
+    </div>
+
+    <!-- Message d'erreur login -->
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="field">
+      <label for="email">Adresse email</label>
+      <input type="email" id="email" placeholder="vous@exemple.ci" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn-login" id="btn-login" onclick="handleLogin()">
+      Se connecter
+    </button>
+
+    <a href="../index.html" class="back-link">← Retour au guide</a>
+  </div>
+
+<!-- Supabase SDK (CDN, pas de build nécessaire) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+  // Afficher le message accès refusé si redirigé depuis une page protégée
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'acces_refuse') {
+      document.getElementById('access-denied-msg').classList.add('is-visible');
+    }
+  })();
+
+  // Si déjà connecté, rediriger directement
+  (async function () {
+    var user = await Auth.getCurrentUser();
+    if (user) window.location.href = 'espace-pro.html';
+  })();
+
+  async function handleLogin() {
+    var email    = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+    var btn      = document.getElementById('btn-login');
+    var errorEl  = document.getElementById('error-msg');
+
+    if (!email || !password) {
+      showError('Veuillez remplir tous les champs.');
+      return;
+    }
+
+    // État chargement
+    btn.disabled   = true;
+    btn.innerHTML  = '<span class="spinner"></span> Connexion…';
+    errorEl.classList.remove('is-visible');
+
+    var result = await Auth.login(email, password);
+
+    if (result.error) {
+      showError(translateError(result.error));
+      btn.disabled  = false;
+      btn.innerHTML = 'Se connecter';
+      return;
+    }
+
+    // Vérifier le rôle
+    var profile = await Auth.getProfile(result.user.id);
+    if (!profile || (profile.role !== 'professionnel' && profile.role !== 'admin')) {
+      await Auth.logout();
+      showError('Votre compte n\'est pas encore activé comme professionnel. Contactez l\'administrateur.');
+      btn.disabled  = false;
+      btn.innerHTML = 'Se connecter';
+      return;
+    }
+
+    // Succès
+    window.location.href = 'espace-pro.html';
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('is-visible');
+  }
+
+  function translateError(err) {
+    if (err.includes('Invalid login'))    return 'Email ou mot de passe incorrect.';
+    if (err.includes('Email not confirmed')) return 'Veuillez confirmer votre adresse email.';
+    if (err.includes('Too many requests')) return 'Trop de tentatives. Réessayez dans quelques minutes.';
+    return 'Erreur de connexion : ' + err;
+  }
+
+  // Connexion au "Enter"
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+</script>
+</body>
+</html>
