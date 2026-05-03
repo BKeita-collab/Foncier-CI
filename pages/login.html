@@ -198,9 +198,9 @@
       width: 14px;
       height: 14px;
       border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
+  <button type="button" class="forgot-password" id="forgot-password-btn">
+    Mot de passe oublié ?
+  </button>
       margin-right: 6px;
       vertical-align: middle;
     }
@@ -296,13 +296,30 @@
       showError(translateError(result.error));
       btn.disabled  = false;
       btn.innerHTML = 'Se connecter';
+  // Connexion au "Enter"
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+
+  // Mot de passe oublié
+  document.getElementById('forgot-password-btn').addEventListener('click', function() {
+    var email = document.getElementById('email').value.trim();
+    if (!email) {
+      showError('Veuillez entrer votre adresse email pour réinitialiser le mot de passe.');
       return;
     }
-
-    // Vérifier le rôle
-    var profile = await Auth.getProfile(result.user.id);
-    if (!profile || (profile.role !== 'professionnel' && profile.role !== 'admin')) {
-      await Auth.logout();
+    Auth.resetPassword(email)
+      .then(function(result) {
+        if (result.error) {
+          showError('Erreur lors de la réinitialisation : ' + result.error.message);
+        } else {
+          showError('Un email de réinitialisation a été envoyé si l\'adresse existe.');
+        }
+      });
+  });
+</script>
+</body>
+</html>
       showError('Votre compte n\'est pas encore activé comme professionnel. Contactez l\'administrateur.');
       btn.disabled  = false;
       btn.innerHTML = 'Se connecter';
