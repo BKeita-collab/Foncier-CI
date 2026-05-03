@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nouveau mot de passe — Foncier Ivoirien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg);
+      padding: 2rem 1rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .login-logo a {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--color-green);
+      text-decoration: none;
+    }
+    .login-logo p { font-size: 13px; color: var(--color-text-muted); margin-top: 4px; }
+
+    .login-card h1 {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+    .subtitle { font-size: 13px; color: var(--color-text-muted); margin-bottom: 1.75rem; }
+
+    .field { margin-bottom: 1rem; }
+    .field > label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color 0.15s;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: var(--color-green-mid);
+      background: var(--color-bg-card);
+    }
+
+    /* ── Barre de force du mot de passe ── */
+    .strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--color-border);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .strength-bar__fill {
+      height: 100%;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.25s, background-color 0.25s;
+    }
+    .strength-label {
+      font-size: 11px;
+      color: var(--color-text-light);
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    /* ── Règles visuelles ── */
+    .rules {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+    }
+    .rules li {
+      font-size: 12px;
+      color: var(--color-text-light);
+      padding: 2px 0;
+      transition: color 0.15s;
+    }
+    .rules li::before { content: '○  '; font-size: 10px; }
+    .rules li.ok { color: var(--color-green); }
+    .rules li.ok::before { content: '✓  '; }
+
+    .btn-login {
+      width: 100%;
+      padding: 11px;
+      background: var(--color-green);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 0.5rem;
+    }
+    .btn-login:hover    { background: var(--color-green-mid); }
+    .btn-login:disabled { background: var(--color-text-light); cursor: not-allowed; }
+
+    .error-msg {
+      background: var(--color-terra-light);
+      border: 1px solid rgba(185, 78, 39, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--color-terra);
+      margin-bottom: 1rem;
+      display: none;
+      line-height: 1.6;
+    }
+    .error-msg.is-visible { display: block; }
+
+    .success-msg {
+      background: var(--color-green-light);
+      border: 1px solid rgba(28, 71, 49, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--color-green);
+      margin-bottom: 1rem;
+      display: none;
+      line-height: 1.6;
+    }
+    .success-msg.is-visible { display: block; }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--color-green); }
+
+    /* ── Lien expiré ── */
+    .expired-box {
+      text-align: center;
+      padding: 0.5rem 0 1rem;
+    }
+    .expired-box p {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-logo">
+    <a href="../index.html">Foncier Ivoirien</a>
+    <p>Côte d'Ivoire · Espace professionnel</p>
+  </div>
+
+  <!-- ── État normal : formulaire ── -->
+  <div id="form-state">
+    <h1>Nouveau mot de passe</h1>
+    <p class="subtitle">Choisissez un mot de passe sécurisé pour votre compte.</p>
+
+    <div class="error-msg"   id="error-msg"></div>
+    <div class="success-msg" id="success-msg"></div>
+
+    <div class="field">
+      <label for="new-pwd">Nouveau mot de passe</label>
+      <input type="password" id="new-pwd"
+        placeholder="Minimum 8 caractères"
+        oninput="checkStrength(this.value)"
+        autocomplete="new-password">
+      <div class="strength-bar">
+        <div class="strength-bar__fill" id="strength-fill"></div>
+      </div>
+      <div class="strength-label" id="strength-label"></div>
+      <ul class="rules">
+        <li id="rule-length">8 caractères minimum</li>
+        <li id="rule-upper">Au moins une majuscule</li>
+        <li id="rule-number">Au moins un chiffre</li>
+      </ul>
+    </div>
+
+    <div class="field">
+      <label for="confirm-pwd">Confirmer le mot de passe</label>
+      <input type="password" id="confirm-pwd"
+        placeholder="Répétez le mot de passe"
+        autocomplete="new-password">
+    </div>
+
+    <button class="btn-login" id="btn-save" onclick="savePassword()">
+      Enregistrer le mot de passe
+    </button>
+  </div>
+
+  <!-- ── État lien expiré / invalide ── -->
+  <div id="expired-state" style="display:none">
+    <h1>Lien expiré</h1>
+    <div class="expired-box">
+      <p>
+        Ce lien de réinitialisation est <strong>expiré ou invalide</strong>.<br>
+        Les liens sont valables <strong>1 heure</strong> après l'envoi.
+      </p>
+      <a href="login.html" class="btn-login"
+        style="display:block;text-align:center;text-decoration:none;">
+        Demander un nouveau lien
+      </a>
+    </div>
+  </div>
+
+  <a href="login.html" class="back-link">← Retour à la connexion</a>
+</div>
+
+<!-- ─── Navigation site (injectée par nav-injector.js) ─── -->
+<div class="site-nav" style="margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1rem;"></div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/nav-injector.js"></script>
+
+<script>
+  /* ── Vérification du lien au chargement ─────────────────────────────── */
+  (async function () {
+    // Supabase intercepte automatiquement le token de récupération dans le hash.
+    // On attend un court instant pour lui laisser le temps de traiter le hash.
+    await new Promise(function(resolve){ setTimeout(resolve, 400); });
+
+    var client  = getClient(); // défini dans auth.js
+    var session = await client.auth.getSession();
+
+    if (!session.data.session) {
+      // Pas de session active → lien expiré ou page ouverte directement
+      document.getElementById('form-state').style.display    = 'none';
+      document.getElementById('expired-state').style.display = 'block';
+    }
+  })();
+
+  /* ── Indicateur de force ─────────────────────────────────────────────── */
+  function checkStrength(pwd) {
+    var hasLength = pwd.length >= 8;
+    var hasUpper  = /[A-Z]/.test(pwd);
+    var hasNumber = /[0-9]/.test(pwd);
+
+    setRule('rule-length', hasLength);
+    setRule('rule-upper',  hasUpper);
+    setRule('rule-number', hasNumber);
+
+    var score = [hasLength, hasUpper, hasNumber].filter(Boolean).length;
+    var fill  = document.getElementById('strength-fill');
+    var label = document.getElementById('strength-label');
+
+    var levels = [
+      { pct: '0%',   color: 'transparent',          text: '' },
+      { pct: '33%',  color: 'var(--color-terra)',   text: 'Faible' },
+      { pct: '66%',  color: 'var(--color-amber)',   text: 'Moyen' },
+      { pct: '100%', color: 'var(--color-green)',   text: 'Fort ✓' },
+    ];
+
+    fill.style.width           = levels[score].pct;
+    fill.style.backgroundColor = levels[score].color;
+    label.textContent          = levels[score].text;
+    label.style.color          = levels[score].color;
+  }
+
+  function setRule(id, ok) {
+    document.getElementById(id).classList.toggle('ok', ok);
+  }
+
+  /* ── Sauvegarde ──────────────────────────────────────────────────────── */
+  async function savePassword() {
+    var pwd     = document.getElementById('new-pwd').value;
+    var confirm = document.getElementById('confirm-pwd').value;
+    var btn     = document.getElementById('btn-save');
+
+    if (pwd.length < 8) {
+      showError('Le mot de passe doit contenir au moins 8 caractères.'); return;
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      showError('Ajoutez au moins une lettre majuscule.'); return;
+    }
+    if (!/[0-9]/.test(pwd)) {
+      showError('Ajoutez au moins un chiffre.'); return;
+    }
+    if (pwd !== confirm) {
+      showError('Les deux mots de passe ne correspondent pas.'); return;
+    }
+
+    btn.disabled  = true;
+    btn.innerHTML = '<span class="spinner"></span> Enregistrement…';
+
+    var client = getClient();
+    var result = await client.auth.updateUser({ password: pwd });
+
+    if (result.error) {
+      showError('Erreur : ' + result.error.message);
+      btn.disabled  = false;
+      btn.innerHTML = 'Enregistrer le mot de passe';
+      return;
+    }
+
+    // Succès
+    showSuccess('✓ Mot de passe mis à jour. Redirection vers la connexion…');
+    btn.style.display = 'none';
+    setTimeout(function () {
+      window.location.href = 'login.html';
+    }, 2500);
+  }
+
+  /* ── Helpers ─────────────────────────────────────────────────────────── */
+  function showError(msg) {
+    document.getElementById('error-msg').textContent = msg;
+    document.getElementById('error-msg').classList.add('is-visible');
+    document.getElementById('success-msg').classList.remove('is-visible');
+  }
+
+  function showSuccess(msg) {
+    document.getElementById('success-msg').textContent = msg;
+    document.getElementById('success-msg').classList.add('is-visible');
+    document.getElementById('error-msg').classList.remove('is-visible');
+  }
+
+  // Enter pour soumettre
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') savePassword();
+  });
+</script>
+
+</body>
+</html>

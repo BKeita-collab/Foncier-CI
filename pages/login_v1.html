@@ -67,39 +67,13 @@
       margin-bottom: 1rem;
     }
 
-    /* Label simple */
-    .field > label {
+    .field label {
       display: block;
       font-size: 13px;
       font-weight: 500;
       color: var(--color-text-muted);
       margin-bottom: 6px;
     }
-
-    /* Ligne label + lien "Mot de passe oublié ?" */
-    .field-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .field-header label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-text-muted);
-    }
-    .forgot-link {
-      font-size: 12px;
-      color: var(--color-green-mid);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: var(--font-body);
-      padding: 0;
-      text-decoration: underline;
-      transition: color 0.15s;
-    }
-    .forgot-link:hover { color: var(--color-green); }
 
     .field input {
       width: 100%;
@@ -134,8 +108,28 @@
       margin-top: 0.5rem;
     }
 
-    .btn-login:hover    { background: var(--color-green-mid); }
+    .btn-login:hover { background: var(--color-green-mid); }
     .btn-login:disabled { background: var(--color-text-light); cursor: not-allowed; }
+
+    .btn-forgot {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: var(--color-green);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-forgot:hover {
+      background: var(--color-green-light);
+      color: var(--color-green-mid);
+    }
 
     .error-msg {
       background: var(--color-terra-light);
@@ -146,23 +140,9 @@
       color: var(--color-terra);
       margin-bottom: 1rem;
       display: none;
-      line-height: 1.6;
     }
-    .error-msg.is-visible { display: block; }
 
-    /* ── NOUVEAU : message de succès (envoi email reset) ── */
-    .success-msg {
-      background: var(--color-green-light);
-      border: 1px solid rgba(28, 71, 49, 0.15);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 13px;
-      color: var(--color-green);
-      margin-bottom: 1rem;
-      display: none;
-      line-height: 1.6;
-    }
-    .success-msg.is-visible { display: block; }
+    .error-msg.is-visible { display: block; }
 
     .access-denied {
       background: var(--color-amber-light);
@@ -175,6 +155,25 @@
       display: none;
     }
     .access-denied.is-visible { display: block; }
+
+    .forgot-password {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--color-green);
+      font-size: 13px;
+      text-align: right;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      padding: 0;
+      font-family: var(--font-body);
+      transition: color 0.15s;
+    }
+    .forgot-password:hover {
+      color: var(--color-green-mid);
+      text-decoration: underline;
+    }
 
     .back-link {
       display: block;
@@ -200,9 +199,9 @@
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
-<body>
-
-  <div class="login-card">
+  <button type="button" class="btn-forgot" onclick="resetPassword()">
+    Mot de passe oublié ?
+  </button>
     <div class="login-logo">
       <a href="../index.html">Foncier Ivoirien</a>
       <p>Côte d'Ivoire · Espace professionnel</p>
@@ -216,23 +215,20 @@
       ⚠ Votre compte n'a pas les droits d'accès à cet espace.
     </div>
 
-    <!-- Messages erreur / succès -->
-    <div class="error-msg"   id="error-msg"></div>
-    <div class="success-msg" id="success-msg"></div>
+    <!-- Message d'erreur login -->
+    <div class="error-msg" id="error-msg"></div>
+
+  <button onclick="resetPassword()" class="forgot-password">
+    Mot de passe oublié ?
+  </button>
 
     <div class="field">
       <label for="email">Adresse email</label>
       <input type="email" id="email" placeholder="vous@exemple.ci" autocomplete="email">
     </div>
 
-    <!-- Champ mot de passe avec le lien "Mot de passe oublié ?" -->
     <div class="field">
-      <div class="field-header">
-        <label for="password">Mot de passe</label>
-        <button class="forgot-link" type="button" onclick="handleReset()">
-          Mot de passe oublié ?
-        </button>
-      </div>
+      <label for="password">Mot de passe</label>
       <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
     </div>
 
@@ -254,7 +250,7 @@
 <script src="../js/nav-injector.js"></script>
 
 <script>
-  // ── Afficher le message accès refusé si redirigé depuis une page protégée ──
+  // Afficher le message accès refusé si redirigé depuis une page protégée
   (function () {
     var params = new URLSearchParams(window.location.search);
     if (params.get('error') === 'acces_refuse') {
@@ -262,26 +258,27 @@
     }
   })();
 
-  // ── Si déjà connecté, rediriger directement ───────────────────────────────
+  // Si déjà connecté, rediriger directement
   (async function () {
     var user = await Auth.getCurrentUser();
     if (user) window.location.href = 'tableau-bord.html';
   })();
 
-  // ── Connexion ─────────────────────────────────────────────────────────────
   async function handleLogin() {
     var email    = document.getElementById('email').value.trim();
     var password = document.getElementById('password').value;
     var btn      = document.getElementById('btn-login');
+    var errorEl  = document.getElementById('error-msg');
 
     if (!email || !password) {
       showError('Veuillez remplir tous les champs.');
       return;
     }
 
-    btn.disabled  = true;
-    btn.innerHTML = '<span class="spinner"></span> Connexion…';
-    clearMessages();
+    // État chargement
+    btn.disabled   = true;
+    btn.innerHTML  = '<span class="spinner"></span> Connexion…';
+    errorEl.classList.remove('is-visible');
 
     var result = await Auth.login(email, password);
 
@@ -300,71 +297,43 @@
       btn.disabled  = false;
       btn.innerHTML = 'Se connecter';
       return;
-    }
+  // Connexion au "Enter"
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleLogin();
+  });
 
-    // Succès → redirection (ton chemin conservé)
-    window.location.href = 'tableau-bord.html';
-  }
-
-  // ── Réinitialisation du mot de passe ─────────────────────────────────────
-  async function handleReset() {
+  // Fonction de réinitialisation du mot de passe
+  function resetPassword() {
     var email = document.getElementById('email').value.trim();
-
     if (!email) {
-      showError('Entrez votre adresse email ci-dessus, puis cliquez sur "Mot de passe oublié ?".');
+      showError('Veuillez entrer votre adresse email pour réinitialiser le mot de passe.');
       return;
     }
-
-    var btn = document.getElementById('btn-login');
-    btn.disabled  = true;
-    btn.innerHTML = '<span class="spinner"></span> Envoi en cours…';
-    clearMessages();
-
-    // Utilise le client Supabase déjà initialisé dans auth.js
-    var client = getClient();
-    var result = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://bkeita-collab.github.io/Foncier-CI/pages/nouveau-mdp.html'
-    });
-
-    btn.disabled  = false;
-    btn.innerHTML = 'Se connecter';
-
-    if (result.error) {
-      showError('Erreur lors de l\'envoi : ' + result.error.message);
-    } else {
-      showSuccess(
-        '✓ Email envoyé à ' + email + '. ' +
-        'Vérifiez votre boîte mail (et vos spams). Le lien est valable 1 heure.'
-      );
-    }
+    Auth.resetPassword(email)
+      .then(function(result) {
+        if (result.error) {
+          showError('Erreur lors de la réinitialisation : ' + result.error.message);
+        } else {
+          showError('Un email de réinitialisation a été envoyé si l\'adresse existe.');
+        }
+      });
   }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
-  function showError(msg) {
-    document.getElementById('error-msg').textContent = msg;
-    document.getElementById('error-msg').classList.add('is-visible');
-    document.getElementById('success-msg').classList.remove('is-visible');
-  }
-
-  function showSuccess(msg) {
-    document.getElementById('success-msg').textContent = msg;
-    document.getElementById('success-msg').classList.add('is-visible');
-    document.getElementById('error-msg').classList.remove('is-visible');
-  }
-
-  function clearMessages() {
-    document.getElementById('error-msg').classList.remove('is-visible');
-    document.getElementById('success-msg').classList.remove('is-visible');
+</script>
+</body>
+</html>
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('is-visible');
   }
 
   function translateError(err) {
-    if (err.includes('Invalid login'))       return 'Email ou mot de passe incorrect.';
+    if (err.includes('Invalid login'))    return 'Email ou mot de passe incorrect.';
     if (err.includes('Email not confirmed')) return 'Veuillez confirmer votre adresse email.';
-    if (err.includes('Too many requests'))   return 'Trop de tentatives. Réessayez dans quelques minutes.';
+    if (err.includes('Too many requests')) return 'Trop de tentatives. Réessayez dans quelques minutes.';
     return 'Erreur de connexion : ' + err;
   }
 
-  // ── Connexion au "Enter" ──────────────────────────────────────────────────
+  // Connexion au "Enter"
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') handleLogin();
   });
