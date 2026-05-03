@@ -151,16 +151,7 @@
   </div>
 </header>
 
-<!-- Navigation site -->
-<div class="site-nav">
-  <div class="site-nav__inner">
-    <a href="../index.html">Guide</a>
-    <a href="annuaire.html">Annuaire</a>
-    <a href="demarches.html">Démarches</a>
-    <a href="graphiques.html">Graphiques</a>
-    <a href="espace-pro.html" class="is-current">Espace pro</a>
-  </div>
-</div>
+<!-- Navigation site (injectée par nav-injector.js) -->
 
 <main class="main">
 
@@ -273,6 +264,9 @@
     }
   })();
 </script>
+
+<!-- Navigation injector (charge la nav cohérente sur toutes les pages) -->
+<script src="../js/nav-injector.js"></script>
 
 </body>
 </html>

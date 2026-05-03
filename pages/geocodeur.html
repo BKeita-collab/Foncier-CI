@@ -299,15 +299,7 @@
   </div>
 </header>
 
-<div class="site-nav">
-  <div class="site-nav__inner">
-    <a href="../index.html">Guide</a>
-    <a href="annuaire.html">Annuaire</a>
-    <a href="demarches.html">Démarches</a>
-    <a href="graphiques.html">Graphiques</a>
-    <a href="espace-pro.html">Espace pro</a>
-  </div>
-</div>
+<!-- Navigation site (injectée par nav-injector.js) -->
 
 <main class="main">
 
@@ -636,6 +628,9 @@ document.getElementById('city-input').addEventListener('keydown', function(e){
   if (e.key === 'Enter') geocode();
 });
 </script>
+
+<!-- Navigation injector (charge la nav cohérente sur toutes les pages) -->
+<script src="../js/nav-injector.js"></script>
 
 </body>
 </html>

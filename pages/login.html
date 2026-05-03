@@ -196,9 +196,16 @@
     <a href="../index.html" class="back-link">← Retour au guide</a>
   </div>
 
+<!-- ─── Navigation site (injectée par nav-injector.js) ─── -->
+<div class="site-nav" style="margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 1rem;"></div>
+
 <!-- Supabase SDK (CDN, pas de build nécessaire) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../js/auth.js"></script>
+
+<!-- Navigation injector (charge la nav cohérente sur toutes les pages) -->
+<script src="../js/nav-injector.js"></script>
+
 <script>
   // Afficher le message accès refusé si redirigé depuis une page protégée
   (function () {
@@ -211,7 +218,7 @@
   // Si déjà connecté, rediriger directement
   (async function () {
     var user = await Auth.getCurrentUser();
-    if (user) window.location.href = 'espace-pro.html';
+    if (user) window.location.href = 'tableau-bord.html';
   })();
 
   async function handleLogin() {
@@ -250,7 +257,7 @@
     }
 
     // Succès
-    window.location.href = 'espace-pro.html';
+    window.location.href = 'tableau-bord.html';
   }
 
   function showError(msg) {

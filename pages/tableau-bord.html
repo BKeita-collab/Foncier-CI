@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — Espace Professionnel — Foncier Ivoirien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <style>
+    /* Écran de chargement pendant vérification auth */
+    .auth-loading {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .spinner-lg {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--color-border);
+      border-top-color: var(--color-green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Contenu caché jusqu'à auth OK */
+    .dashboard-content { display: none; }
+    .dashboard-content.is-visible { display: block; }
+
+    /* Badge de bienvenue */
+    .welcome-bar {
+      background: var(--color-green-light);
+      border: 1px solid var(--color-green-border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-bar__text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-green);
+      margin-bottom: 2px;
+    }
+
+    .welcome-bar__text span {
+      font-size: 13px;
+      color: #2D5A3D;
+    }
+
+    /* Grille des modules */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .dashboard-card:hover {
+      border-color: var(--color-green-border);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .dashboard-card__icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-green-light);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .dashboard-card__title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .dashboard-card__desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* Logout button */
+    .logout-btn {
+      padding: 10px 16px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      color: var(--color-text);
+    }
+
+    .logout-btn:hover {
+      border-color: var(--color-green);
+      color: var(--color-green);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── En-tête ─── -->
+<header class="page-header">
+  <div class="page-header__inner">
+    <a href="../index.html" class="page-header__back">← Retour au guide</a>
+    <h1>Tableau de bord</h1>
+    <p>Espace réservé aux professionnels de la chaîne foncière</p>
+  </div>
+</header>
+
+<!-- ─── Navigation site (injectée par nav-injector.js) ─── -->
+<!-- Le script nav-injector.js va créer le site-nav ici -->
+
+<!-- ─── Écran de chargement (affiché pendant vérification auth) ─── -->
+<main class="main">
+  <div class="auth-loading" id="loading-screen">
+    <div class="spinner-lg"></div>
+    Vérification des droits d'accès…
+  </div>
+
+  <!-- ─── Contenu (affiché après vérification auth) ─── -->
+  <div class="dashboard-content" id="dashboard-content">
+    <!-- Barre de bienvenue -->
+    <div class="welcome-bar">
+      <div class="welcome-bar__text">
+        <strong id="user-name">Utilisateur</strong>
+        <span id="user-role">Professionnel</span>
+      </div>
+      <button class="logout-btn" onclick="Auth.logout()">Déconnexion</button>
+    </div>
+
+    <!-- Grille des modules -->
+    <div class="dashboard-grid">
+      <a href="annuaire.html" class="dashboard-card">
+        <div class="dashboard-card__icon">📍</div>
+        <div class="dashboard-card__title">Annuaire</div>
+        <div class="dashboard-card__desc">Consultez l'annuaire des professionnels fonciers en Côte d'Ivoire.</div>
+      </a>
+
+      <a href="demarches.html" class="dashboard-card">
+        <div class="dashboard-card__icon">📋</div>
+        <div class="dashboard-card__title">Démarches</div>
+        <div class="dashboard-card__desc">Guides et procédures pour les opérations foncières.</div>
+      </a>
+
+      <a href="graphiques.html" class="dashboard-card">
+        <div class="dashboard-card__icon">📊</div>
+        <div class="dashboard-card__title">Graphiques</div>
+        <div class="dashboard-card__desc">Statistiques et données sur le secteur foncier ivoirien.</div>
+      </a>
+
+      <a href="geocodeur.html" class="dashboard-card">
+        <div class="dashboard-card__icon">🗺️</div>
+        <div class="dashboard-card__title">Géocodeur</div>
+        <div class="dashboard-card__desc">Convertissez les adresses en coordonnées géographiques.</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <strong>Foncier Ivoirien</strong>
+      <p>Espace professionnel de la chaîne foncière<br>en Côte d'Ivoire.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="../index.html">Guide foncier</a></li>
+        <li><a href="annuaire.html">Annuaire</a></li>
+        <li><a href="graphiques.html">Graphiques</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    Espace professionnel réservé à la chaîne foncière.
+  </div>
+</footer>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<!-- Auth module -->
+<script src="../js/auth.js"></script>
+
+<!-- Navigation injector (IMPORTANT: charge le nav AVANT le contenu) -->
+<script src="../js/nav-injector.js"></script>
+
+<!-- Contrôle d'accès et affichage du contenu -->
+<script>
+  (async function () {
+    // Vérifier si l'utilisateur est connecté et a les bons droits
+    var user = await Auth.getCurrentUser();
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    var profile = await Auth.getProfile(user.id);
+    if (!profile || (profile.role !== 'professionnel' && profile.role !== 'admin')) {
+      await Auth.logout();
+      window.location.href = 'login.html?error=acces_refuse';
+      return;
+    }
+
+    // Auth OK : afficher le contenu et masquer le chargement
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('dashboard-content').classList.add('is-visible');
+
+    // Remplir les infos utilisateur
+    document.getElementById('user-name').textContent = profile.nom || user.email;
+    document.getElementById('user-role').textContent = profile.profession || profile.role;
+  })();
+</script>
+
+</body>
+</html>
